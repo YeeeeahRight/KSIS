@@ -32,6 +32,9 @@ public class NetworkInterfacesHandler {
             long hostsAmount = (int)Math.pow(2, 32 - bitMask) - 2;
             deviceSearchersHandler.handle(hostsAmount);
         }
+        if (interfaceCounter == 1) {
+            System.out.println("There are no network interfaces to scan :(");
+        }
     }
 
     private void printInterfaceInfo(NetworkInterface networkInterface, int interfaceCounter) {
