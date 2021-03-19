@@ -1,4 +1,4 @@
-package com.bsuir.network.logic;
+package com.bsuir.network.logic.searcher;
 
 import com.bsuir.network.command.CommandLine;
 import com.bsuir.network.entity.IP;

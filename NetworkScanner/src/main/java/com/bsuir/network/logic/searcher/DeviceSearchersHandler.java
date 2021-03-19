@@ -1,4 +1,4 @@
-package com.bsuir.network.logic;
+package com.bsuir.network.logic.searcher;
 
 import com.bsuir.network.command.CommandLine;
 import com.bsuir.network.entity.IP;
@@ -54,6 +54,7 @@ public class DeviceSearchersHandler {
         if (hostsAmountLeft > 0) {
             hostsAmounts[SEARCHERS_AMOUNT - 1] += hostsAmountLeft;
         }
+        //производителя mac-adres и имя
         return hostsAmounts;
     }
 
@@ -69,6 +70,7 @@ public class DeviceSearchersHandler {
             }
             IPs[i] = ip;
             prevIPStr = ip.getIPStr();
+            System.out.println(ip.getIPStr());
         }
         return IPs;
     }

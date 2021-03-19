@@ -1,4 +1,4 @@
-package com.bsuir.network.interfaces;
+package com.bsuir.network.logic.interfaces;
 
 import java.net.NetworkInterface;
 import java.net.SocketException;

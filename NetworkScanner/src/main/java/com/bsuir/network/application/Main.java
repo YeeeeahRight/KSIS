@@ -1,7 +1,7 @@
-package com.bsuir.network;
+package com.bsuir.network.application;
 
-import com.bsuir.network.interfaces.NetworkInterfacesFinder;
-import com.bsuir.network.interfaces.NetworkInterfacesHandler;
+import com.bsuir.network.logic.interfaces.NetworkInterfacesFinder;
+import com.bsuir.network.logic.interfaces.NetworkInterfacesHandler;
 
 import java.net.*;
 import java.util.List;

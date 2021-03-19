@@ -1,7 +1,7 @@
-package com.bsuir.network.interfaces;
+package com.bsuir.network.logic.interfaces;
 
 import com.bsuir.network.entity.IP;
-import com.bsuir.network.logic.DeviceSearchersHandler;
+import com.bsuir.network.logic.searcher.DeviceSearchersHandler;
 
 import java.math.BigInteger;
 import java.net.*;
