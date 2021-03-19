@@ -2,6 +2,7 @@ package com.bsuir.network.logic.searcher;
 
 import com.bsuir.network.command.CommandLine;
 import com.bsuir.network.entity.IP;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -10,6 +11,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DeviceSearcher implements Runnable {
+    private static final Logger LOGGER = Logger.getLogger(DeviceSearcher.class);
     public static final int TIMEOUT = 1000;
 
     private final long hostsAmount;
@@ -17,16 +19,14 @@ public class DeviceSearcher implements Runnable {
     private final String networkIP;
     private final String broadcastIP;
     private final AtomicLong devicesCounter;
-    private final CountDownLatch countDownLatch;
 
     public DeviceSearcher(long hostsAmount, IP ip, String networkIP, String broadcastIP,
-                          AtomicLong devicesCounter, CountDownLatch countDownLatch) {
+                          AtomicLong devicesCounter) {
         this.hostsAmount = hostsAmount;
         this.ip = ip;
         this.networkIP = networkIP;
         this.broadcastIP = broadcastIP;
         this.devicesCounter = devicesCounter;
-        this.countDownLatch = countDownLatch;
     }
 
     @Override
@@ -47,11 +47,10 @@ public class DeviceSearcher implements Runnable {
                     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 }
             } catch (IOException e) {
-                System.out.printf("Warning! Problem occurs during checking %s: %s", ipStr, e.getMessage());
+                LOGGER.warn("Problem occurs during checking " + ipStr, e);
             }
             ip.increment();
         }
-        countDownLatch.countDown();
     }
 
 

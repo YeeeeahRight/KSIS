@@ -2,21 +2,22 @@ package com.bsuir.network.logic.searcher;
 
 import com.bsuir.network.command.CommandLine;
 import com.bsuir.network.entity.IP;
+import org.apache.log4j.Logger;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DeviceSearchersHandler {
+    private static final Logger LOGGER = Logger.getLogger(DeviceSearchersHandler.class);
     private static final int SEARCHERS_AMOUNT = 10;
 
-    private final CountDownLatch countDownLatch;
     private final AtomicLong devicesCounter;
     private final String networkIP;
     private final String broadcastIP;
 
     public DeviceSearchersHandler(String networkIP, String broadcastIP) {
-        countDownLatch = new CountDownLatch(SEARCHERS_AMOUNT);
         devicesCounter = new AtomicLong(0);
         this.networkIP = networkIP;
         this.broadcastIP = broadcastIP;
@@ -27,18 +28,20 @@ public class DeviceSearchersHandler {
         int[] hostAmounts = getHostAmounts(hostsAmount);
         IP[] IPs = getIPs(networkIP, hostAmounts);
         CommandLine.executeCommand("arp refresh");
+        ExecutorService executorService = Executors.newFixedThreadPool(SEARCHERS_AMOUNT);
         System.out.println("\n~~~~~Scanning devices~~~~~\n");
         for (int i = 0; i < SEARCHERS_AMOUNT; i++) {
             Thread searcher = new Thread(new DeviceSearcher(hostAmounts[i], IPs[i], networkIP,
-                    broadcastIP, devicesCounter, countDownLatch));
-            searcher.start();
+                    broadcastIP, devicesCounter));
+            executorService.submit(searcher);
         }
+        executorService.shutdown();
         try {
-            if (!countDownLatch.await(10, TimeUnit.MINUTES)) {
-                System.out.println();
+            if (!executorService.awaitTermination(15, TimeUnit.MINUTES)) {
+                LOGGER.warn("Searching was more than 15 minutes(too long). ");
             }
-        } catch (InterruptedException ignore) {
-            System.out.println("Some ");
+        } catch (InterruptedException e) {
+            LOGGER.debug(e.getMessage(), e);
         }
         System.out.println("\n~~~~Scanning done~~~~\n");
     }
@@ -70,7 +73,6 @@ public class DeviceSearchersHandler {
             }
             IPs[i] = ip;
             prevIPStr = ip.getIPStr();
-            System.out.println(ip.getIPStr());
         }
         return IPs;
     }

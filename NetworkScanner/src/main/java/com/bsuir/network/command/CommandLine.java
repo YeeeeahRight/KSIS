@@ -1,5 +1,7 @@
 package com.bsuir.network.command;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommandLine {
+    private static final Logger LOGGER = Logger.getLogger(CommandLine.class);
 
     public static String executeARPCommand(String addr) {
         executeCommand("arp refresh");
@@ -31,7 +34,7 @@ public class CommandLine {
                 line = cmdReader.readLine();
             }
         } catch (IOException e) {
-            System.out.println("Warning! Problem occurs with reading answer from cmd: " + e.getMessage());
+            LOGGER.warn("Problem occurs with reading answer from cmd.", e);
         }
         return answer.toString();
     }

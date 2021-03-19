@@ -2,6 +2,7 @@ package com.bsuir.network.logic.interfaces;
 
 import com.bsuir.network.entity.IP;
 import com.bsuir.network.logic.searcher.DeviceSearchersHandler;
+import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
 import java.net.*;
@@ -9,6 +10,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class NetworkInterfacesHandler {
+    private static final Logger LOGGER = Logger.getLogger(NetworkInterfacesHandler.class);
     private final List<NetworkInterface> networkInterfaces;
 
     public NetworkInterfacesHandler(List<NetworkInterface> networkInterfaces) {
@@ -49,7 +51,7 @@ public class NetworkInterfacesHandler {
             String macStr = convertMacToStr(networkInterface.getHardwareAddress());
             System.out.println("MAC address: " + macStr);
         } catch (SocketException e) {
-            System.out.println("Warning! Error occurs during getting MAC address of net interface: " + e.getMessage());
+            LOGGER.warn("Problem occurs during getting MAC address of network interface.", e);
         }
     }
 
